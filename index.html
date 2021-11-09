@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menadzer</title>
+</head>
+<body onload="init()">  
+    <h1>Menadzer loginu i hasla</h1>
+
+    <h2>Dodaj nowy login i haslo</h2>
+    <input type="text" name="" id="haslo">
+    <input type="text" name="" id="login">
+    <div id="LisaHasel"></div>
+    <button onclick="addHaslo()">Dodaj</button>
+    <script>
+        function addHaslo() {
+            let haslo = document.getElementById('haslo').value;
+            let login = document.getElementById('login').value;
+            let pass = login + " HASLO: "+haslo;
+            let LisaHasel = JSON.parse(window.localStorage.getItem('LisaHasel'));
+
+            if (LisaHasel === null) LisaHasel = Array();
+            LisaHasel.push(pass);
+            window.localStorage.setItem('LisaHasel', JSON.stringify(LisaHasel));
+            document.getElementById('haslo').value = "";
+            document.getElementById('login').value = "";
+            showLisaHasel();
+        }
+        function showLisaHasel() {
+            let hasloArray = JSON.parse(window.localStorage.getItem('LisaHasel'));
+            if(hasloArray === null) return;
+            let LisaHasel = document.getElementById('LisaHasel');
+            let htmlBuffer = "";
+            htmlBuffer += "<ul>";
+                for (let i = 0; i < hasloArray.length; i++) {
+                    htmlBuffer += "<li><button onclick=\"removeHaslo("+i+")\">Usun</button>" + hasloArray[i] + "</li>";
+                }
+                htmlBuffer += "</ul>";
+                LisaHasel.innerHTML = htmlBuffer;
+        }
+        function removeHaslo(i) {
+            let hasloArray = JSON.parse(window.localStorage.getItem('LisaHasel'));
+            hasloArray.splice(i, 1);
+            window.localStorage.setItem('LisaHasel', JSON.stringify(hasloArray));
+            showLisaHasel();
+        }
+    
+    </script>
+
+</body>
+</html>
